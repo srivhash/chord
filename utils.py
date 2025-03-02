@@ -42,11 +42,15 @@ def sendRequest(node, senddata):
 	clientHostname, clientPort = splt(node)
 	sock2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	remote_ip = socket.gethostbyname( clientHostname )
-	sock2.connect((remote_ip , int(clientPort)))
-	sock2.send(senddata)
+	try:
+		sock2.connect((remote_ip , int(clientPort)))
+	except OSError as e:
+		print("Connection failed:", e)
+		return
+	sock2.send(senddata.encode('utf-8'))
 	sock2.close()
 
-print hash(conc('localhost', 3400))%size
-print hash(conc('localhost', 3401))%size
-print hash(conc('localhost', 3403))%size
+print(hash(conc('localhost', 3400)) % size)
+print(hash(conc('localhost', 3401)) % size)
+print(hash(conc('localhost', 3403)) % size)
 

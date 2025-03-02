@@ -34,12 +34,12 @@ elif isRootNode == 0:
 # Creating a socket for root node
 sock = node.listenSocket()	
 strBuf = ''
-print 'Hash of node is ' + str(node.ID)
+print('Hash of node is ' + str(node.ID))
 # Listener for requests
 def reciever():
 	while 1:
 		conn, addr = sock.accept()
-		req = conn.recv(1024)	
+		req = conn.recv(1024).decode('utf-8')
 
 		msg = req.split('|')
 		if not req:
@@ -135,7 +135,7 @@ def reciever():
 			i = int(msg[3])
 			size  = int(msg[4])
 			chunk_size = 512
-			print 'Downloading ' + str(i) + '/' + str(size)
+			print("Downloading " + str(i) + "/" + str(size))
 			if i==0:
 				strBuf = chunk
 			else:
@@ -145,16 +145,16 @@ def reciever():
 				file = open(newfname, 'wb')
 				file.write(binascii.unhexlify(strBuf))
 				file.close()
-			print 'Successfully downloaded ' + filename
+			print("Successfully downloaded " + filename)
 
 		else:
-			print "Wrong request type"
-			print req
+			print("Wrong request type")
+			print(req)
 			# sys.exit()	
 
 def displayMenu():
 	while 1:
-		menu_opt = raw_input("Please select an action:\n \
+		menu_opt = input("Please select an action:\n \
 		1. Store a file\n \
 		2. Retrieve a file\n \
 		3. Display finger table\n \
@@ -162,26 +162,26 @@ def displayMenu():
 		5. Exit the program\n ")
 
 		if menu_opt == "1":
-			print "Entering file store operation"
-			filepath = raw_input("Enter the full path of file you want to store:\nExample: /home/user/filename.txt\n")
+			print("Entering file store operation")
+			filepath = input("Enter the full path of file you want to store:\nExample: /home/user/filename.txt\n")
 			filename = os.path.basename(filepath)
 			ID = hashid(filename)
 			data = 'STORE' + '|' + node.name + '|' + str(ID) + '|' + filename
 			if node.contains(ID):
 				keystore[str(ID)] = filename
-				print 'File to be stored here'
+				print('File to be stored here')
 			else:
 				sendRequest(node.succ, data)
-				print "Store request sent"
+				print("Store request sent")
 
 		elif menu_opt == "2":
-			print "Performing retrieval of file"
-			filename = raw_input("Enter the file to be retreived:\n")
+			print("Performing retrieval of file")
+			filename = input("Enter the file to be retreived:\n")
 			ID = hashid(filename)
 			data = 'RETRIEVE' + '|' + node.name  + '|' + str(ID)  + '|' + filename
 			
 			if str(ID) in keystore:
-				print 'Already have file'
+				print('Already have file')
 			else: 
 				sendRequest(node.succ,data)
 
@@ -193,10 +193,10 @@ def displayMenu():
 
 
 		elif menu_opt == "5":
-			print "Exiting the program"
+			print("Exiting the program")
 
 		else:
-			print "Invalid menu entry"
+			print("Invalid menu entry")
 
 
 menu = threading.Thread(target=displayMenu)
@@ -214,4 +214,4 @@ executePeriodically(node.refreshFingerTable, 10)
 
 reciever()
 
-	
+

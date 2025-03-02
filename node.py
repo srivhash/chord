@@ -60,9 +60,9 @@ class Node:
 				f.node = node
 
 	def printFingerTable(self):
-		print '-----Current finger table----'
+		print('-----Current finger table----')
 		for f in self.ftable:
-			print '   ' + str(f.ID) + ' : ' + f.node
+			print('   ' + str(f.ID) + ' : ' + f.node)
  
 	def setSuperSucc(self, ss):
 		self.superSucc = ss
@@ -121,7 +121,7 @@ class Node:
 			try:
 				sendRequest(self.succ, data)
 				# print 'Checking stability...ok'
-			except socket.error, msg:
+			except socket.error as msg:
 				# print 'Checking stability...error'
 				if self.pred == self.succ:
 					self.setSucc(self.name)
@@ -138,22 +138,22 @@ class Node:
 		global sock	
 		try:
 			sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		except socket.error, msg:
-			print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message : ' + msg[1]
+		except socket.error as msg:
+			print('Failed to create socket. Error code: ' + str(msg))
 			sys.exit();
 		try:
 			sock.bind((self.hostname, self.port))
-		except socket.error , msg:
-			print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message: ' + msg[1]
+		except socket.error as msg:
+			print('Bind failed. Error Code: ' + str(msg))
 			sys.exit()
 		sock.listen(10)
 		return sock
 	def printNode(self):
 		#Function to print current node positon
-		print "Node ID:", self.ID
-		print "Predecessor:", self.pred
-		print "This node:", self.name
-		print "Successor:", self.succ
+		print("Node ID: " + str(self.ID))
+		print("Predecessor: " + self.pred)
+		print("This node: " + self.name)
+		print("Successor: " + self.succ)
 
 	def sendFile(self, filename, node):
 		#Send file to target node
@@ -166,5 +166,5 @@ class Node:
 		for i in range(0, size, chunk_size):
 			data = 'UPLOADING|' + filename + '|' + ascii_content[i:i+chunk_size] + '|' + str(i) + '|' + str(size) 
 			sendRequest(node,data)
-		print 'Sent file to ' + node
-		
+		print('Sent file to ' + node)
+
